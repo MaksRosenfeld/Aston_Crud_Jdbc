@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-12-26T08:27:45.224Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" version="20.7.4" etag="qBB2ALGBL0bAOMLr70vy" type="github">
+<mxfile host="app.diagrams.net" modified="2022-12-26T14:10:46.630Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" version="20.7.4" etag="20v3wdNJUJ8mbMpj8Jhm" type="github">
   <diagram id="jR4bB2jNTpCeWg0GXVCj" name="Страница 1">
     <mxGraphModel dx="794" dy="438" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -29,10 +29,10 @@
           <mxGeometry y="30" width="160" height="60" as="geometry" />
         </mxCell>
         <mxCell id="TPSTV_UEtCRmzGS2on3v-30" value="Game" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;sketch=1;" vertex="1" parent="1">
-          <mxGeometry x="380" y="60" width="160" height="130" as="geometry" />
+          <mxGeometry x="380" y="60" width="160" height="120" as="geometry" />
         </mxCell>
         <mxCell id="TPSTV_UEtCRmzGS2on3v-31" value="PK       game_id&#xa;&#xa;            game_name&#xa;&#xa;            exclusive" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;rounded=1;sketch=1;fontStyle=0" vertex="1" parent="TPSTV_UEtCRmzGS2on3v-30">
-          <mxGeometry y="30" width="160" height="100" as="geometry" />
+          <mxGeometry y="30" width="160" height="90" as="geometry" />
         </mxCell>
         <mxCell id="TPSTV_UEtCRmzGS2on3v-32" value="Play" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;sketch=1;" vertex="1" parent="1">
           <mxGeometry x="380" y="220" width="160" height="170" as="geometry" />
