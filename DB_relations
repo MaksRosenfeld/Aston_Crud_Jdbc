@@ -1,0 +1,68 @@
+<mxfile host="app.diagrams.net" modified="2022-12-26T14:10:46.630Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" version="20.7.4" etag="20v3wdNJUJ8mbMpj8Jhm" type="github">
+  <diagram id="jR4bB2jNTpCeWg0GXVCj" name="Страница 1">
+    <mxGraphModel dx="794" dy="438" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-22" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="360" y="170" width="30" height="30" as="geometry">
+            <mxRectangle width="30" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-23" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="170" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-24" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="TPSTV_UEtCRmzGS2on3v-23">
+          <mxGeometry width="30" height="30" as="geometry">
+            <mxRectangle width="30" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-26" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="360" y="170" width="30" height="30" as="geometry">
+            <mxRectangle width="30" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-28" value="Playground" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="60" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-29" value="PK     playground_id&#xa;&#xa;          playground_name" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;rounded=1;sketch=1;fontStyle=0" vertex="1" parent="TPSTV_UEtCRmzGS2on3v-28">
+          <mxGeometry y="30" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-30" value="Game" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="60" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-31" value="PK       game_id&#xa;&#xa;            game_name&#xa;&#xa;            exclusive" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;rounded=1;sketch=1;fontStyle=0" vertex="1" parent="TPSTV_UEtCRmzGS2on3v-30">
+          <mxGeometry y="30" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-32" value="Play" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="220" width="160" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-33" value="PK       play_id&#xa;&#xa;FK       playground_id&#xa;&#xa;FK       game_id&#xa;&#xa;            price&#xa;&#xa;            amount&#xa;&#xa;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;rounded=1;sketch=1;fontStyle=0" vertex="1" parent="TPSTV_UEtCRmzGS2on3v-32">
+          <mxGeometry y="30" width="160" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-35" value="" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=top;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="TPSTV_UEtCRmzGS2on3v-29">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="110" y="100" as="sourcePoint" />
+            <mxPoint x="370" y="290" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="140" y="100" />
+              <mxPoint x="90" y="100" />
+              <mxPoint x="90" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TPSTV_UEtCRmzGS2on3v-37" value="" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=top;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="380" y="105" as="sourcePoint" />
+            <mxPoint x="370" y="320" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="380" y="100" />
+              <mxPoint x="330" y="100" />
+              <mxPoint x="330" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
