@@ -13,7 +13,7 @@ public interface DAO<T extends Entity> {
 
     boolean update(T name) throws SQLException;
 
-    boolean delete(T name);
+    boolean delete(T name) throws SQLException;
 
     boolean isExisted(T name);
 

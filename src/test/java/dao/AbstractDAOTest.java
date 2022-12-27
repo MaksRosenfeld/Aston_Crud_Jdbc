@@ -3,6 +3,7 @@ package dao;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +13,6 @@ import java.sql.Savepoint;
 public abstract class AbstractDAOTest {
 
     static Connection connection;
-    static Savepoint savepoint;
 
     @BeforeAll
     static void initialize() throws SQLException {
@@ -28,7 +28,9 @@ public abstract class AbstractDAOTest {
 
     @AfterEach
     void rollback() throws SQLException {
-        connection.rollback(savepoint);
+        connection.rollback();
     }
+
+
 
 }

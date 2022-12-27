@@ -16,10 +16,9 @@ class PlaygroundDAOTest extends AbstractDAOTest {
     private static PlaygroundDAO playgroundDAO;
 
 
-    @BeforeAll
-    static void initPlayground() throws SQLException {
+    @BeforeEach
+    void initPlayground() throws SQLException {
         playgroundDAO = new PlaygroundDAO(connection);
-        savepoint = connection.setSavepoint();
     }
 
     @DisplayName("Check on creating new playground")

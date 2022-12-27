@@ -9,7 +9,7 @@ CREATE TABLE game
 (
     game_id   IDENTITY NOT NULL,
     game_name TEXT,
-    exclusive boolean,
+    exclusive boolean DEFAULT false,
     PRIMARY KEY (game_id)
 );
 

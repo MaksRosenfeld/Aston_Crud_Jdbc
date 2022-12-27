@@ -125,6 +125,7 @@ public class PlaygroundDAO implements DAO<Playground> {
         if (name.getId() != 0) {
             try (PreparedStatement ps = connection.prepareStatement(SQLPlayground.DELETE.QUERY)) {
                 ps.setString(1, name.getName().name());
+                ps.setInt(2, name.getId());
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows > 0) {
                     log.info("Playground was deleted successfully");
@@ -162,7 +163,7 @@ public class PlaygroundDAO implements DAO<Playground> {
         GET("SELECT * FROM playground WHERE playground_id=(?);"),
         ADD("INSERT INTO playground(playground_name) VALUES ((?));"),
         UPDATE("UPDATE playground SET playground_name=(?) WHERE playground_id=(?);"),
-        DELETE("DELETE FROM playground WHERE playground_name=(?);"),
+        DELETE("DELETE FROM playground WHERE playground_name ILIKE ((?)) AND playground_id=(?);"),
         SEARCH_NAME("SELECT playground_name FROM playground WHERE playground_name=(?);");
         final String QUERY;
 
