@@ -31,17 +31,18 @@ public class PlayDAO implements DAO<Play> {
     }
 
     @Override
-    public void update(Play name) {
+    public boolean update(Play name) {
+        return false;
 
     }
 
     @Override
-    public Play delete(Play name) {
-        return null;
+    public boolean delete(Play name) {
+        return false;
     }
 
     @Override
-    public boolean isExist(Play name) {
+    public boolean isExisted(Play name) {
         return false;
     }
 

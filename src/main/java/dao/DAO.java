@@ -11,11 +11,11 @@ public interface DAO<T extends Entity> {
 
     T read(int id);
 
-    void update(T name);
+    boolean update(T name) throws SQLException;
 
-    T delete(T name);
+    boolean delete(T name);
 
-    boolean isExist(T name);
+    boolean isExisted(T name);
 
 
 }

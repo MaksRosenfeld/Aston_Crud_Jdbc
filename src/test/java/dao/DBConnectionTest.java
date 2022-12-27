@@ -26,7 +26,10 @@ class DBConnectionTest extends AbstractDAOTest {
     @DisplayName("Check if objects from Playground table fetched correct")
     @Test
     void getObjectsFromPlaygroundTable() throws SQLException {
+        // given
         String[] expected = {"Xbox", "SonyPlaystation", "PC"};
+
+        // when
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM playground")) {
             List<String> allPlaygrounds = new ArrayList<>();
@@ -34,6 +37,8 @@ class DBConnectionTest extends AbstractDAOTest {
                 String playground = resultSet.getString(2);
                 allPlaygrounds.add(playground);
             }
+
+            // then
             assertArrayEquals(expected, allPlaygrounds.toArray());
         }
     }
@@ -41,7 +46,10 @@ class DBConnectionTest extends AbstractDAOTest {
     @DisplayName("Check if all ids are incremented")
     @Test
     void checkOnId() throws SQLException {
+        // given
         Long[] expected = {1L, 2L, 3L};
+
+        // when
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM playground")) {
             List<Long> allIds = new ArrayList<>();
@@ -49,6 +57,8 @@ class DBConnectionTest extends AbstractDAOTest {
                 long playground = resultSet.getLong(1);
                 allIds.add(playground);
             }
+
+            // then
             assertArrayEquals(expected, allIds.toArray());
         }
     }

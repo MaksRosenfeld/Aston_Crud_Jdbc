@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Aston_Crud_Jdbc:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>Aston_Crud_Jdbc</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="Aston_Crud_Jdbc.war">
+      <element id="artifact" artifact-name="Aston_Crud_Jdbc:war exploded" />
+    </root>
+  </artifact>
+</component>

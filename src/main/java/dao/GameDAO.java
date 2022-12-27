@@ -3,13 +3,19 @@ package dao;
 import entities.Game;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @Getter
 @Setter
 public class GameDAO implements DAO<Game> {
+
+    private static final Logger log = getLogger(GameDAO.class);
 
     private final Connection connection;
 
@@ -29,17 +35,17 @@ public class GameDAO implements DAO<Game> {
     }
 
     @Override
-    public void update(Game name) {
-
+    public boolean update(Game name) {
+        return false;
     }
 
     @Override
-    public Game delete(Game name) {
-        return null;
+    public boolean delete(Game name) {
+        return false;
     }
 
     @Override
-    public boolean isExist(Game name) {
+    public boolean isExisted(Game name) {
         return false;
     }
 }
