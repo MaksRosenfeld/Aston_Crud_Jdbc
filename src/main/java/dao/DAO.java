@@ -3,6 +3,7 @@ package dao;
 import entities.Entity;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface DAO<T extends Entity> {
 
@@ -13,9 +14,11 @@ public interface DAO<T extends Entity> {
 
     boolean update(T name) throws SQLException;
 
-    boolean delete(T name) throws SQLException;
+    boolean delete(int id) throws SQLException;
 
-    boolean isExisted(T name);
+    List<T> getAll();
+
+
 
 
 }

@@ -13,13 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlaygroundDAOTest extends AbstractDAOTest {
 
-    private static PlaygroundDAO playgroundDAO;
-
-
-    @BeforeEach
-    void initPlayground() throws SQLException {
-        playgroundDAO = new PlaygroundDAO(connection);
-    }
 
     @DisplayName("Check on creating new playground")
     @Test
@@ -86,25 +79,18 @@ class PlaygroundDAOTest extends AbstractDAOTest {
 
     @DisplayName("Deleting non existing and existing playgroung")
     @Test
-    void deletePlaygrounds() {
+    void deletePlaygrounds() throws SQLException {
         // given
-        Playground withoutId = Playground.builder()
-                .withName(Station.PC).build();
-        Playground existing = Playground.builder()
-                .withId(3).withName(Station.PC).build();
-        Playground nonExisting = Playground.builder()
-                .withId(99).withName(Station.SONY_PLAYSTATION).build();
+        int existedPlayground = 2;
+        int nonExistedPlayground = 9;
 
         // when
-        boolean withoutIdFalse = playgroundDAO.delete(withoutId);
-        boolean existingTrue = playgroundDAO.delete(existing);
-        boolean nonExistingFalse = playgroundDAO.delete(nonExisting);
-
+        boolean deleteTrue = playgroundDAO.delete(existedPlayground);
+        boolean deleteFalse = playgroundDAO.delete(nonExistedPlayground);
 
         // then
-        assertFalse(withoutIdFalse);
-        assertTrue(existingTrue);
-        assertFalse(nonExistingFalse);
+        assertFalse(deleteFalse);
+        assertTrue(deleteTrue);
 
     }
 }

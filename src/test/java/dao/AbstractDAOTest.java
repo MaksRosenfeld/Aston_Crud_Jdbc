@@ -13,12 +13,18 @@ import java.sql.Savepoint;
 public abstract class AbstractDAOTest {
 
     static Connection connection;
+    static GameDAO gameDAO;
+    static PlaygroundDAO playgroundDAO;
+    static PlayDAO playDAO;
 
     @BeforeAll
     static void initialize() throws SQLException {
         connection = DriverManager.getConnection(
                 Driver.H2_TEST.getUrl(), "sa", "sa");
         connection.setAutoCommit(false);
+        gameDAO = new GameDAO(connection);
+        playgroundDAO = new PlaygroundDAO(connection);
+        playDAO = new PlayDAO(connection);
     }
 
     @AfterAll

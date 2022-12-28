@@ -1,5 +1,6 @@
 package dao;
 
+import entities.Game;
 import entities.Playground;
 import entities.Station;
 import lombok.Getter;
@@ -10,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class, that works with Playground object. All standard
@@ -39,8 +42,7 @@ public class PlaygroundDAO implements DAO<Playground> {
     @Override
     public boolean create(@NotNull Playground name) throws SQLException {
         if (!isExisted(name)) {
-            try (PreparedStatement ps = connection.prepareStatement(SQLPlayground.ADD.QUERY,
-                    Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement ps = connection.prepareStatement(SQLPlayground.ADD.QUERY)) {
                 ps.setString(1, name.getName().name());
                 ps.executeUpdate();
                 log.info("Adding new Playground object to database");
@@ -70,14 +72,10 @@ public class PlaygroundDAO implements DAO<Playground> {
             ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
-                int playgroundId = resultSet.getInt("playground_id");
-                String playgroundName = resultSet.getString("playground_name");
-                log.info("Playground {} is found", playgroundName);
+                Playground playground = Mapper.mapPlayground(resultSet);
+                log.info("Playground {} is found", playground.getName().name());
                 resultSet.close();
-                return Playground.builder()
-                        .withId(playgroundId)
-                        .withName(Station.valueOf(playgroundName))
-                        .build();
+                return playground;
             }
         } catch (SQLException e) {
             log.info("An error occurred while searching for the Playground");
@@ -117,27 +115,50 @@ public class PlaygroundDAO implements DAO<Playground> {
      * Checks on id. If it's 0, then no object will be deleted.
      * If there is such an object, deletes it from database
      *
-     * @param name Playground object, that has to be deleted from database
+     * @param id id of the Playground, that has to be deleted from database
      * @return true if it was deleted
      */
     @Override
-    public boolean delete(Playground name) {
-        if (name.getId() != 0) {
-            try (PreparedStatement ps = connection.prepareStatement(SQLPlayground.DELETE.QUERY)) {
-                ps.setString(1, name.getName().name());
-                ps.setInt(2, name.getId());
-                int affectedRows = ps.executeUpdate();
-                if (affectedRows > 0) {
-                    log.info("Playground was deleted successfully");
-                    return true;
-                }
-            } catch (SQLException e) {
-                log.info("There is an error occurred while deleting the playground");
-                throw new RuntimeException(e);
+    public boolean delete(int id) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(SQLPlayground.DELETE.QUERY)) {
+            ps.setInt(1, id);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                log.info("Playground was deleted successfully");
+                return true;
             }
+        } catch (SQLException e) {
+            log.info("There is an error occurred while deleting the playground");
+            connection.rollback();
+            throw new RuntimeException(e);
         }
+
         log.info("No playground to delete was found");
         return false;
+    }
+
+    /**
+     * Get all the playgrounds objects from database
+     *
+     * @return List of Playgrounds
+     */
+    @Override
+    public List<Playground> getAll() {
+        List<Playground> allPlaygrounds = new ArrayList<>();
+        log.info("Collecting all playgrounds");
+        try(Statement st = connection.createStatement()) {
+            ResultSet resultSet = st.executeQuery(PlaygroundDAO.SQLPlayground.GET_ALL.QUERY);
+            while(resultSet.next()) {
+                Playground playground = Mapper.mapPlayground(resultSet);
+                allPlaygrounds.add(playground);
+            }
+            resultSet.close();
+            return allPlaygrounds;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -146,7 +167,7 @@ public class PlaygroundDAO implements DAO<Playground> {
      * @param name Playground object
      * @return true if yes
      */
-    @Override
+
     public boolean isExisted(Playground name) {
         try (PreparedStatement ps = connection.prepareStatement(SQLPlayground.SEARCH_NAME.QUERY)) {
             ps.setString(1, name.getName().name());
@@ -163,8 +184,9 @@ public class PlaygroundDAO implements DAO<Playground> {
         GET("SELECT * FROM playground WHERE playground_id=(?);"),
         ADD("INSERT INTO playground(playground_name) VALUES ((?));"),
         UPDATE("UPDATE playground SET playground_name=(?) WHERE playground_id=(?);"),
-        DELETE("DELETE FROM playground WHERE playground_name ILIKE ((?)) AND playground_id=(?);"),
-        SEARCH_NAME("SELECT playground_name FROM playground WHERE playground_name=(?);");
+        DELETE("DELETE FROM playground WHERE playground_id=(?);"),
+        SEARCH_NAME("SELECT playground_name FROM playground WHERE playground_name=(?);"),
+        GET_ALL("SELECT * FROM playground");
         final String QUERY;
 
         SQLPlayground(String query) {

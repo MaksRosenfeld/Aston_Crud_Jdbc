@@ -1,17 +1,16 @@
 package dao;
 
-import entities.Game;
 import entities.Play;
+import entities.Playground;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -20,7 +19,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class PlayDAO implements DAO<Play> {
 
     private static final Logger log = getLogger(PlayDAO.class);
-
     private final Connection connection;
 
     public PlayDAO(Connection connection) {
@@ -29,30 +27,33 @@ public class PlayDAO implements DAO<Play> {
 
 
     /**
-     * Method adds new playground to database, getting the Playground
+     * Method adds new play to database, getting the Play
      * from client. First checks whether it is already in database and
      * only then adds it or not
      *
-     * @param name Playground object sent by client
+     * @param name Play object sent by client
      * @return true if object was successfully added to database
      * @throws SQLException if there appeared the error in process of adding
      */
     @Override
     public boolean create(@NotNull Play name) throws SQLException {
-        if (!isExisted(name)) {
+        if (isExisted(name).isEmpty()) {
+            log.info("Play is new. I will create it");
             try (PreparedStatement ps = connection.prepareStatement(PlayDAO.SQLPlay.ADD.QUERY)) {
-                ps.setString(1, name.getName());
-                ps.setBoolean(2, name.isExclusive());
+                ps.setInt(1, name.getPlayground().getId());
+                ps.setInt(2, name.getGame().getId());
+                ps.setDouble(3, name.getPrice());
+                ps.setInt(4, name.getAmount());
                 ps.executeUpdate();
-                log.info("Adding new Game object to database");
+                log.info("Adding new Play object to database");
                 return true;
             } catch (SQLException e) {
                 log.info("Error is appeared while adding to database");
                 connection.rollback();
-                throw new RuntimeException("Game failed to be inserted");
+                throw new RuntimeException(e);
             }
         }
-        log.info("Game is already in database");
+        log.info("Play is already in database");
         return false;
     }
 
@@ -62,7 +63,7 @@ public class PlayDAO implements DAO<Play> {
      * object. In case if there is no such an object returns null
      *
      * @param id given from client id number
-     * @return object of Game
+     * @return object of Play
      */
     @Override
     public Play read(int id) {
@@ -70,20 +71,16 @@ public class PlayDAO implements DAO<Play> {
             ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
-                int gameId = resultSet.getInt("game_id");
-                String gameName = resultSet.getString("game_name");
-                log.info("Game {} is found", gameName);
+                Play play = Mapper.mapPlay(resultSet);
+                log.info("Play is found");
                 resultSet.close();
-                return Game.builder()
-                        .withId(gameId)
-                        .withName(gameName)
-                        .build();
+                return play;
             }
         } catch (SQLException e) {
-            log.info("An error occurred while searching for the Game");
+            log.info("An error occurred while searching for the Play");
             throw new RuntimeException(e);
         }
-        log.info("No game has been found");
+        log.info("No play has been found");
         return null;
     }
 
@@ -98,9 +95,11 @@ public class PlayDAO implements DAO<Play> {
     public boolean update(@NonNull Play name) throws SQLException {
         if (name.getId() != 0) {
             try (PreparedStatement ps = connection.prepareStatement(PlayDAO.SQLPlay.UPDATE.QUERY)) {
-                ps.setString(1, name.getName());
-                ps.setBoolean(2, name.isExclusive());
-                ps.setInt(3, name.getId());
+                ps.setInt(1, name.getPlayground().getId());
+                ps.setInt(2, name.getGame().getId());
+                ps.setDouble(3, name.getPrice());
+                ps.setInt(4, name.getAmount());
+                ps.setInt(5, name.getGame().getId());
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows > 0) {
                     log.info("Updated successfully");
@@ -112,7 +111,7 @@ public class PlayDAO implements DAO<Play> {
                 throw new RuntimeException(e);
             }
         }
-        log.info("No such game in database or you didn't specify the id");
+        log.info("No such play in database or you didn't specify the id");
         return false;
     }
 
@@ -120,43 +119,71 @@ public class PlayDAO implements DAO<Play> {
      * Checks on id. If it's 0, then no object will be deleted.
      * If there is such an object, deletes it from database
      *
-     * @param name Game object, that has to be deleted from database
+     * @param id Play object, that has to be deleted from database
      * @return true if it was deleted
      */
     @Override
-    public boolean delete(Play name) throws SQLException {
-        if (name.getId() != 0) {
-            try (PreparedStatement ps = connection.prepareStatement(PlayDAO.SQLPlay.DELETE.QUERY)) {
-                ps.setString(1, name.getName());
-                ps.setInt(2, name.getId());
-                int affectedRows = ps.executeUpdate();
-                if (affectedRows > 0) {
-                    log.info("game was deleted successfully");
-                    return true;
-                }
-            } catch (SQLException e) {
-                log.info("There is an error occurred while deleting the game");
-                connection.rollback();
-                throw new RuntimeException(e);
+    public boolean delete(int id) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(PlayDAO.SQLPlay.DELETE.QUERY)) {
+            ps.setInt(1, id);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                log.info("Play was deleted successfully");
+                return true;
             }
+        } catch (SQLException e) {
+            log.info("There is an error occurred while deleting the play");
+            connection.rollback();
+            throw new RuntimeException(e);
         }
-        log.info("No game to delete was found or you didn't specify id");
+
+        log.info("No play to delete was found or you didn't specify id");
         return false;
     }
 
     /**
-     * Checking whether Game object is in database
+     * Get all the playgrounds objects from database
      *
-     * @param name Playground object
-     * @return true if yes
+     * @return List of Playgrounds
      */
     @Override
-    public boolean isExisted(Play name) {
+    public List<Play> getAll() {
+        List<Play> allPlays = new ArrayList<>();
+        log.info("Collecting all plays");
+        try(Statement st = connection.createStatement()) {
+            ResultSet resultSet = st.executeQuery(PlayDAO.SQLPlay.GET_ALL.QUERY);
+            while(resultSet.next()) {
+                Play play = Mapper.mapPlay(resultSet);
+                allPlays.add(play);
+            }
+            resultSet.close();
+            return allPlays;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    /**
+     * Checking whether Play objects is in database
+     *
+     * @param name Play object
+     * @return true if yes
+     */
+
+    public List<Play> isExisted(Play name) {
+        List<Play> plays = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(PlayDAO.SQLPlay.SEARCH_NAME.QUERY)) {
-            ps.setString(1, name.getName());
+            ps.setString(1, name.getGame().getName());
             ResultSet resultSet = ps.executeQuery();
-            log.info("Checking if game exists in database");
-            return resultSet.next();
+            log.info("Checking if play exists in database");
+            while (resultSet.next()) {
+                Play play = Mapper.mapPlay(resultSet);
+                plays.add(play);
+            }
+            return plays;
         } catch (SQLException e) {
             log.info("There is an error occurred while checking on existence");
             throw new RuntimeException(e);
@@ -164,11 +191,23 @@ public class PlayDAO implements DAO<Play> {
     }
 
     private enum SQLPlay {
-        GET("SELECT * FROM play WHERE play_id=(?);"),
-        ADD("INSERT INTO play(playground, game, price, amount) VALUES ((?), (?), (?), (?));"),
-        UPDATE("UPDATE play SET playground=(?), game=(?), price=(?), amount=(?) WHERE game_id=(?);"),
+        GET("""
+                SELECT play_id, playground.playground_id, playground_name, game.game_id, game_name, exclusive, price, amount
+                FROM play JOIN game ON play.game_id=game.game_id
+                          JOIN playground ON play.playground_id=playground.playground_id
+                WHERE play_id=(?);
+                """),
+        ADD("INSERT INTO play(playground_id, game_id, price, amount) VALUES ((?), (?), (?), (?));"),
+        UPDATE("UPDATE play SET playground_id=(?), game_id=(?), price=(?), amount=(?) WHERE game_id=(?);"),
         DELETE("DELETE FROM play WHERE play_id=(?);"),
-        SEARCH_NAME("SELECT playground_id, game_id FROM play WHERE playground_id=(?) AND game_id=(?);");
+        SEARCH_NAME("""
+                SELECT play_id, playground.playground_id, playground_name, game.game_id, game_name, exclusive, price, amount
+                FROM play JOIN game ON play.game_id=game.game_id
+                          JOIN playground ON play.playground_id=playground.playground_id
+                WHERE game_name ILIKE ((?));
+                """
+        ),
+        GET_ALL("SELECT * FROM play");
         final String QUERY;
 
         SQLPlay(String query) {

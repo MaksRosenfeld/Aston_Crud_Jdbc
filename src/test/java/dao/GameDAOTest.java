@@ -12,12 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameDAOTest extends AbstractDAOTest {
 
-    private GameDAO gameDAO;
-
-    @BeforeEach
-    void initPlayground() throws SQLException {
-        gameDAO = new GameDAO(connection);
-    }
 
     @DisplayName("Add non existed and existed game")
     @Test
@@ -29,11 +23,13 @@ class GameDAOTest extends AbstractDAOTest {
 
         // when
         boolean nonExistedTrue = gameDAO.create(nonExisted);
+        Game mario = gameDAO.read(5);
         boolean existedFalse = gameDAO.create(existedGame);
         boolean existedWithMistakeFalse = gameDAO.create(existedSmallLetters);
 
         // then
         assertTrue(nonExistedTrue);
+        assertEquals("Mario", mario.getName());
         assertFalse(existedFalse);
         assertFalse(existedWithMistakeFalse);
     }
@@ -71,21 +67,19 @@ class GameDAOTest extends AbstractDAOTest {
     @Test
     void delete() throws SQLException {
         // give
-        Game existedGame = Game.builder().withId(4).withName("Last of Us").build();
-        Game wrongId = Game.builder().withId(1).withName("Last of Us").build();
-        Game smallLetters = Game.builder().withId(2).withName("Doom").build();
-        Game nonExistedGame = Game.builder().withName("Call of Duty").build();
+        int existedGame = 3;
+        int nonExistedGame = 9;
+        int anotherNonExistedGame = -5;
+
 
         // when
         boolean deleteTrue = gameDAO.delete(existedGame);
-        boolean deleteFalseWrongId = gameDAO.delete(wrongId);
-        boolean deleteTrueSmall = gameDAO.delete(smallLetters);
         boolean deleteFalse = gameDAO.delete(nonExistedGame);
+        boolean deleteFalseNegativeId = gameDAO.delete(anotherNonExistedGame);
 
         // then
         assertTrue(deleteTrue);
-        assertFalse(deleteFalseWrongId);
-        assertTrue(deleteTrueSmall);
+        assertFalse(deleteFalseNegativeId);
         assertFalse(deleteFalse);
     }
 }
