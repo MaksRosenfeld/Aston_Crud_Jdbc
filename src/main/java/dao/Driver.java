@@ -10,7 +10,7 @@ public enum Driver {
             "INIT=" +
             "runscript from 'src/test/resources/create_test_db.sql'\\;" +
             "runscript from 'src/test/resources/init_test_db.sql'"),
-    POSTGRES("postgres");
+    POSTGRES("jdbc:postgresql://localhost:5432/aston_crud_jdbc");
 
     private String url;
 

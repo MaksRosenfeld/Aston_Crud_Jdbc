@@ -22,6 +22,10 @@
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:2.0.6" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.4.5" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.4.5" />
+          <element id="library" level="project" name="Maven: org.postgresql:postgresql:42.5.1" />
+          <element id="library" level="project" name="Maven: org.checkerframework:checker-qual:3.5.0" />
+          <element id="library" level="project" name="Maven: com.mchange:c3p0:0.9.5.5" />
+          <element id="library" level="project" name="Maven: com.mchange:mchange-commons-java:0.2.19" />
         </element>
       </element>
       <element id="directory" name="META-INF">

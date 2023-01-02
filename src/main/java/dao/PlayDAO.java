@@ -207,7 +207,11 @@ public class PlayDAO implements DAO<Play> {
                 WHERE game_name ILIKE ((?));
                 """
         ),
-        GET_ALL("SELECT * FROM play");
+        GET_ALL("""
+                SELECT play_id, playground.playground_id, playground_name, game.game_id, game_name, exclusive, price, amount
+                FROM play JOIN game ON play.game_id=game.game_id
+                          JOIN playground ON play.playground_id=playground.playground_id
+                """);
         final String QUERY;
 
         SQLPlay(String query) {

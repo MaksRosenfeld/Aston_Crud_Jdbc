@@ -27,7 +27,7 @@ class DBConnectionTest extends AbstractDAOTest {
     @Test
     void getObjectsFromPlaygroundTable() throws SQLException {
         // given
-        String[] expected = {"Xbox", "SonyPlaystation", "PC"};
+        String[] expected = {"XBOX", "SONY_PLAYSTATION", "PC"};
 
         // when
         try(Statement statement = connection.createStatement();
