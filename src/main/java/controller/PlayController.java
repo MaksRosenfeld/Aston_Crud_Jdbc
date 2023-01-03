@@ -21,7 +21,8 @@ import java.util.Map;
 @WebServlet(urlPatterns = {
         "/api/all_plays",
         "/api/delete_play",
-        "/api/get_play"})
+        "/api/get_play",
+        "/api/update_play"})
 public class PlayController extends HttpServlet {
 
 
@@ -58,14 +59,19 @@ public class PlayController extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println(req.getParameter("gameId"));
-
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int playId = Integer.parseInt(req.getParameter("id"));
+        String name = req.getParameter("name");
+        int gameId = Integer.parseInt(req.getParameter("gameId"));
+        int playgroundId = Integer.parseInt(req.getParameter("playground"));
+        double price = Double.parseDouble(req.getParameter("price"));
+        int amount = Integer.parseInt(req.getParameter("amount"));
+        boolean exclusive = Boolean.parseBoolean(req.getParameter("exclusive"));
         try (Connection connection = ConnectionPool.getDataSource().getConnection()) {
             PlayService playService = new PlayService(connection);
             GameService gameService = new GameService(connection);
-//            gameService.update()
-//            playService.update(id, playgroundId, )
+            gameService.update(gameId, name, exclusive);
+            playService.update(playId, playgroundId, gameId, price, amount);
             resp.setStatus(200);
         } catch (PropertyVetoException | SQLException e) {
             throw new RuntimeException(e);

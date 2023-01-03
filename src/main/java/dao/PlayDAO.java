@@ -176,7 +176,6 @@ public class PlayDAO implements DAO<Play> {
         List<Play> plays = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(PlayDAO.SQLPlay.SEARCH_NAME.QUERY)) {
             ps.setString(1, name.getGame().getName());
-            ps.setInt(2, name.getPlayground().getId());
             ResultSet resultSet = ps.executeQuery();
             log.info("Checking if play exists in database");
             while (resultSet.next()) {
@@ -210,7 +209,7 @@ public class PlayDAO implements DAO<Play> {
                 SELECT play_id, playground.playground_id, playground_name, game.game_id, game_name, exclusive, price, amount
                 FROM play JOIN game ON play.game_id=game.game_id
                           JOIN playground ON play.playground_id=playground.playground_id
-                WHERE game_name ILIKE ((?)) AND play.playground_id=(?);
+                WHERE game_name ILIKE ((?));
                 """
         ),
         GET_ALL("""
