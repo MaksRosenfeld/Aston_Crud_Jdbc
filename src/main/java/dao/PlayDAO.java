@@ -1,7 +1,6 @@
 package dao;
 
 import entities.Play;
-import entities.Playground;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -150,9 +149,9 @@ public class PlayDAO implements DAO<Play> {
     public List<Play> getAll() {
         List<Play> allPlays = new ArrayList<>();
         log.info("Collecting all plays");
-        try(Statement st = connection.createStatement()) {
+        try (Statement st = connection.createStatement()) {
             ResultSet resultSet = st.executeQuery(PlayDAO.SQLPlay.GET_ALL.QUERY);
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 Play play = Mapper.mapPlay(resultSet);
                 allPlays.add(play);
             }
@@ -177,11 +176,18 @@ public class PlayDAO implements DAO<Play> {
         List<Play> plays = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(PlayDAO.SQLPlay.SEARCH_NAME.QUERY)) {
             ps.setString(1, name.getGame().getName());
+            ps.setInt(2, name.getPlayground().getId());
             ResultSet resultSet = ps.executeQuery();
             log.info("Checking if play exists in database");
             while (resultSet.next()) {
                 Play play = Mapper.mapPlay(resultSet);
-                plays.add(play);
+                if (play.getGame().isExclusive()) {
+                    log.info("Game is already in DB and exclusive");
+                    plays.add(play);
+                } else if (name.getPlayground().getId() == play.getPlayground().getId()) {
+                    log.info("You try to add absolutely the same game with the same station");
+                    plays.add(play);
+                }
             }
             return plays;
         } catch (SQLException e) {
@@ -204,7 +210,7 @@ public class PlayDAO implements DAO<Play> {
                 SELECT play_id, playground.playground_id, playground_name, game.game_id, game_name, exclusive, price, amount
                 FROM play JOIN game ON play.game_id=game.game_id
                           JOIN playground ON play.playground_id=playground.playground_id
-                WHERE game_name ILIKE ((?));
+                WHERE game_name ILIKE ((?)) AND play.playground_id=(?);
                 """
         ),
         GET_ALL("""

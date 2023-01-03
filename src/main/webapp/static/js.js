@@ -35,6 +35,10 @@ $(document).ready(function () {
     $("#add-button").click(() => {
         $("#addNewGame").text("Add new game")
         $("#save-game-button").text("Save game")
+        $("#new-game-name").val('')
+        $("#choose-station").val(0)
+        $("#new-game-price").val('');
+        $("#new-game-amount").val('');
         showAllStations();
 
     })
@@ -46,7 +50,7 @@ $(document).ready(function () {
         let amount = $("#new-game-amount").val();
         let exclusive = !!$("#new-game-exclusive").is(":checked");
         if ($("#save-game-button").text() === "Save game") {
-            if (!gameName || !pgName || !price || !amount) {
+            if (!gameName || pgName === 0 || !price || !amount) {
                 alert("Some fields are empty");
             } else {
                 $.ajax("api/save_game", {
@@ -60,11 +64,14 @@ $(document).ready(function () {
                     }
 
                 })
-                location.reload();
             }
+            location.reload();
         } else {
             let gameId = $("#game-id-hidden").val();
-            $.post('api/update_play', {
+            if (!gameName || pgName === 0 || !price || !amount) {
+                alert("Some fields are empty");
+            } else {
+                $.post('api/update_play', {
                     id: idToUpdate,
                     gameId: gameId,
                     name: gameName,
@@ -73,8 +80,8 @@ $(document).ready(function () {
                     amount: amount,
                     exclusive: exclusive
                 })
-
-
+            }
+            location.reload();
 
 
         }
